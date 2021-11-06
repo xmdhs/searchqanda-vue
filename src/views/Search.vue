@@ -9,20 +9,16 @@
     @enter="enter"
   >
     <div v-for="r in list" :key="r" class="result">
-      <search-result
-        :keyword="r.Key"
-        :href="r.Link"
-        :title="r.Title"
-        :txt="r.Txt"
-        :txt1="r.Txt1"
-      ></search-result>
+      <search-result :keyword="r.Key" :href="r.Link" :title="r.Title" :txt="r.Txt" :txt1="r.Txt1"></search-result>
     </div>
   </transition-group>
   <div v-else>
     <p>{{ msg }}</p>
   </div>
   <hr />
-  <p v-if="nextLink"><router-link :to="nextLink">more</router-link></p>
+  <p v-if="nextLink">
+    <router-link :to="nextLink">more</router-link>
+  </p>
   <p v-else>没有了</p>
 </template>
 
@@ -31,20 +27,22 @@
 import searchResult from "../components/searchResult.vue";
 
 export default {
-  name: "Home",
+  name: "Search",
   components: {
     searchResult,
   },
   data() {
     return {
-      title: "",
       list: [],
-      page: 0,
-      q: "",
       msg: "获取中",
       nextLink: "",
       i: 0,
     };
+  },
+  props: {
+    title: String,
+    q: String,
+    page: Number,
   },
   methods: {
     async getdata() {
@@ -92,20 +90,14 @@ export default {
     },
   },
   mounted() {
-    this.title = this.$route.query.q + " - 问答版搜索";
-    document.title = this.title;
-    this.q = this.$route.query.q;
-    this.page = this.$route.query.page || 0;
     this.getdata();
+    document.title = this.title;
     window.addEventListener("scroll", this.onscroll, true);
   },
   unmounted() {
     window.removeEventListener("scroll", this.onscroll, true);
   },
-  beforeRouteUpdate(to, from, next) {
-    this.title = this.$route.query.q + " - 问答版搜索";
-    this.q = to.query.q;
-    this.page = to.query.page || 0;
+  beforeRouteUpdate(to,from,next) {
     this.getdata();
     next();
   },
