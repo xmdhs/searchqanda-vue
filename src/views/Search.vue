@@ -81,7 +81,7 @@ export default {
       done();
     },
     onscroll(e) {
-      if (e.length > 0 && e[0].intersectionRatio > 0) {
+      if (e.length > 0 && e[0].intersectionRatio > 0 && this.nextLink != "") {
         this.$router.push(this.nextLink);
       }
     },
@@ -92,9 +92,9 @@ export default {
     },
   },
   mounted() {
+    document.title = this.title;
     (async () => {
       await this.getdata();
-      document.title = this.title;
       this.o = new IntersectionObserver(this.onscroll);
       this.o.observe(this.$refs.bottom);
     })();
