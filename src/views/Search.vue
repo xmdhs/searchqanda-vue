@@ -30,7 +30,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import searchResult from "../components/searchResult.vue";
 
 export default {
@@ -93,10 +92,12 @@ export default {
     },
   },
   mounted() {
-    this.getdata();
-    document.title = this.title;
-    this.o = new IntersectionObserver(this.onscroll);
-    this.o.observe(this.$refs.bottom);
+    (async () => {
+      await this.getdata();
+      document.title = this.title;
+      this.o = new IntersectionObserver(this.onscroll);
+      this.o.observe(this.$refs.bottom);
+    })();
   },
   unmounted() {
     this.o.disconnect();
