@@ -9,7 +9,13 @@
     @enter="enter"
   >
     <div v-for="r in list" :key="r" class="result">
-      <search-result :keyword="r.Key" :href="r.Link" :title="r.Title" :txt="r.Txt" :txt1="r.Txt1"></search-result>
+      <search-result
+        :keyword="r.Key"
+        :href="r.Link"
+        :title="r.Title"
+        :txt="r.Txt"
+        :txt1="r.Txt1"
+      ></search-result>
     </div>
   </transition-group>
   <div v-else>
@@ -20,6 +26,7 @@
     <router-link :to="nextLink">more</router-link>
   </p>
   <p v-else>没有了</p>
+  <div ref="bottom"></div>
 </template>
 
 <script>
@@ -36,7 +43,6 @@ export default {
       list: [],
       msg: "获取中",
       nextLink: "",
-      i: 0,
     };
   },
   props: {
@@ -75,31 +81,25 @@ export default {
       el.style["animation-delay"] = `${this.i}ms`;
       done();
     },
-    onscroll() {
-      let scrollTop =
-        document.documentElement.scrollTop || document.body.scrollTop;
-      let windowHeight =
-        document.documentElement.clientHeight || document.body.clientHeight;
-
-      let scrollHeight =
-        document.documentElement.scrollHeight || document.body.scrollHeight;
-
-      if (scrollTop + windowHeight >= scrollHeight) {
+    onscroll(e) {
+      if (e.length > 0 && e[0].intersectionRatio > 0) {
         this.$router.push(this.nextLink);
       }
+    },
+  },
+  watch: {
+    page() {
+      this.getdata();
     },
   },
   mounted() {
     this.getdata();
     document.title = this.title;
-    window.addEventListener("scroll", this.onscroll, true);
+    this.o = new IntersectionObserver(this.onscroll);
+    this.o.observe(this.$refs.bottom);
   },
   unmounted() {
-    window.removeEventListener("scroll", this.onscroll, true);
-  },
-  beforeRouteUpdate(to,from,next) {
-    this.getdata();
-    next();
+    this.o.disconnect();
   },
 };
 </script>

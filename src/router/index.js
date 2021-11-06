@@ -6,11 +6,11 @@ const routes = [
     path: '/search/s',
     name: 'search',
     component: Search,
-    props: route => ({ 
+    props: route => ({
       title: route.query.q + " - 问答版搜索",
-      page: route.query.page || 0,
+      page: route.query.page ? Number(route.query.page) : 0,
       q: route.query.q || '',
-     })
+    })
   }
 ]
 
