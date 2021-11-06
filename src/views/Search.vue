@@ -23,6 +23,7 @@
   </div>
   <hr />
   <p v-if="nextLink"><router-link :to="nextLink">more</router-link></p>
+  <p v-else>没有了</p>
 </template>
 
 <script>
@@ -58,11 +59,14 @@ export default {
         return;
       }
       this.list.push(...json.Data);
-      if (this.list.length >= 20) {
+      if (json.Data.length >= 20) {
         let s = new URLSearchParams();
         s.set("q", this.q);
         s.set("page", this.page ? Number(this.page) + 1 : 1);
         this.nextLink = "/search/s?" + s.toString();
+      } else {
+        this.nextLink = "";
+        window.removeEventListener("scroll", this.onscroll, true);
       }
       if (this.list.length >= 500) {
         this.list = this.list.slice(100, this.list.length);
