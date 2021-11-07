@@ -11,7 +11,9 @@
 </template>
 
 <script>
-export default {
+defineComponent
+
+export default defineComponent({
   name: "searchResult",
   props: {
     href: String,
@@ -20,7 +22,7 @@ export default {
     keyword: String,
     txt1: String,
   },
-};
+});
 </script>
 
 <style scoped>

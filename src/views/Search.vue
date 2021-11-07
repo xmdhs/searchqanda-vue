@@ -32,8 +32,10 @@
 
 <script>
 import searchResult from "../components/searchResult.vue";
+import { defineComponent } from 'vue'
 
-export default {
+
+export default defineComponent({
   name: "Search",
   components: {
     searchResult,
@@ -102,7 +104,7 @@ export default {
   unmounted() {
     this.o.disconnect();
   },
-};
+});
 </script>
 
 <style scoped>
