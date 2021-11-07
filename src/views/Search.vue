@@ -5,6 +5,8 @@
     name="result-list"
     tag="div"
     class="result-list"
+    :css="false"
+    @enter="enter"
   >
     <div v-for="r in list" :key="r" class="result">
       <search-result
@@ -50,6 +52,7 @@ export default {
   },
   methods: {
     async getdata() {
+      this.i = 0;
       let s = new URLSearchParams();
       s.set("q", this.q);
       s.set("page", this.page);
@@ -71,6 +74,11 @@ export default {
       if (this.list.length >= 500) {
         this.list = this.list.slice(100, this.list.length);
       }
+    },
+    enter(el, done) {
+      this.i = this.i + 80;
+      el.style["animation-delay"] = `${this.i}ms`;
+      done();
     },
     onscroll(e) {
       if (e.length > 0 && e[0].intersectionRatio > 0 && this.nextLink != "") {
@@ -98,13 +106,19 @@ export default {
 </script>
 
 <style scoped>
-.result-list-enter-active,
-.result-list-leave-active {
-  transition: all 1s;
-}
-.result-list-enter-from,
-.result-list-leave-to {
+.result {
+  animation-name: fadeIn;
+  animation-duration: 1s;
   opacity: 0;
-  transform: translateY(30px);
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 </style>
