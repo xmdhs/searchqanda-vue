@@ -98,12 +98,6 @@ export default {
 </script>
 
 <style scoped>
-.result {
-  animation-name: fadeIn;
-  animation-duration: 1s;
-  opacity: 0;
-  animation-fill-mode: forwards;
-}
 .result-list-enter-active,
 .result-list-leave-active {
   transition: all 1s;
