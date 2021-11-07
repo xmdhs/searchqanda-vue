@@ -22,11 +22,12 @@
     <p>{{ msg }}</p>
   </div>
   <hr />
-  <p v-if="nextLink">
-    <router-link :to="nextLink">more</router-link>
-  </p>
-  <p v-else>没有了</p>
-  <div ref="bottom"></div>
+  <div ref="bottom">
+    <p v-if="nextLink">
+      <router-link :to="nextLink">more</router-link>
+    </p>
+    <p v-else>没有了</p>
+  </div>
 </template>
 
 <script>
@@ -69,7 +70,6 @@ export default {
         this.nextLink = "/search/s?" + s.toString();
       } else {
         this.nextLink = "";
-        window.removeEventListener("scroll", this.onscroll, true);
       }
       if (this.list.length >= 500) {
         this.list = this.list.slice(100, this.list.length);
