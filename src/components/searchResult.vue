@@ -10,19 +10,14 @@
   </blockquote>
 </template>
 
-<script>
-defineComponent
-
-export default defineComponent({
-  name: "searchResult",
-  props: {
+<script setup lang="ts">
+const props = defineProps({
     href: String,
     title: String,
     txt: String,
     keyword: String,
     txt1: String,
-  },
-});
+})
 </script>
 
 <style scoped>

@@ -9,13 +9,7 @@
     @enter="enter"
   >
     <div v-for="r in list" :key="r" class="result">
-      <search-result
-        :keyword="r.Key"
-        :href="r.Link"
-        :title="r.Title"
-        :txt="r.Txt"
-        :txt1="r.Txt1"
-      ></search-result>
+      <search-result :keyword="r.Key" :href="r.Link" :title="r.Title" :txt="r.Txt" :txt1="r.Txt1"></search-result>
     </div>
   </transition-group>
   <div v-else>
@@ -30,81 +24,86 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import searchResult from "../components/searchResult.vue";
-import { defineComponent } from 'vue'
+import { ref, watch, toRefs, onMounted, nextTick, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 
 
-export default defineComponent({
-  name: "Search",
-  components: {
-    searchResult,
-  },
-  data() {
-    return {
-      list: [],
-      msg: "获取中",
-      nextLink: "",
-    };
-  },
-  props: {
-    title: String,
-    q: String,
-    page: Number,
-  },
-  methods: {
-    async getdata() {
-      this.i = 0;
-      let s = new URLSearchParams();
-      s.set("q", this.q);
-      s.set("page", this.page);
-      const response = await fetch("/search/api/s?" + s.toString());
-      const json = await response.json();
-      if (json.code != 0) {
-        this.msg = json.msg;
-        return;
-      }
-      this.list.push(...json.Data);
-      if (json.Data.length >= 20) {
-        let s = new URLSearchParams();
-        s.set("q", this.q);
-        s.set("page", this.page ? Number(this.page) + 1 : 1);
-        this.nextLink = "/search/s?" + s.toString();
-      } else {
-        this.nextLink = "";
-      }
-      if (this.list.length >= 500) {
-        this.list = this.list.slice(100, this.list.length);
-      }
-    },
-    enter(el, done) {
-      this.i = this.i + 80;
-      el.style["animation-delay"] = `${this.i}ms`;
-      done();
-    },
-    onscroll(e) {
-      if (e.length > 0 && e[0].intersectionRatio > 0 && this.nextLink != "") {
-        this.$router.push(this.nextLink);
-      }
-    },
-  },
-  watch: {
-    page() {
-      this.getdata();
-    },
-  },
-  mounted() {
-    document.title = this.title;
-    (async () => {
-      await this.getdata();
-      this.o = new IntersectionObserver(this.onscroll);
-      this.o.observe(this.$refs.bottom);
-    })();
-  },
-  unmounted() {
-    this.o.disconnect();
-  },
+let list = ref([])
+let nextLink = ref("")
+let msg = ref("获取中")
+
+const props = defineProps({
+  title: String,
+  q: String,
+  page: Number,
+})
+
+let p = toRefs(props)
+
+let i = 0
+
+function enter(el: any, done: () => void) {
+  i = i + 80;
+  el.style["animation-delay"] = `${i}ms`;
+  done();
+}
+
+async function getdata() {
+  i = 0;
+  let s = new URLSearchParams();
+  s.set("q", props.q);
+  s.set("page", String(props.page));
+  const response = await fetch("/search/api/s?" + s.toString());
+  const json = await response.json();
+  if (json.code != 0) {
+    msg.value = json.msg;
+    return;
+  }
+  list.value.push(...json.Data);
+  if (json.Data.length >= 20) {
+    let s = new URLSearchParams();
+    s.set("q", props.q);
+    s.set("page", props.page ? String(Number(props.page + 1)) : "1");
+    nextLink.value = "/search/s?" + s.toString();
+  } else {
+    nextLink.value = "";
+  }
+  if (list.value.length >= 500) {
+    list.value = list.value.slice(100, list.value.length);
+  }
+}
+
+watch(p.page, () => {
+  getdata();
 });
+
+let o: IntersectionObserver;
+const router = useRouter()
+
+function onscroll(e: IntersectionObserverEntry[]) {
+  if (e.length > 0 && e[0].intersectionRatio > 0 && nextLink.value != "") {
+    router.push(nextLink.value);
+  }
+}
+
+const bottom = ref(null)
+
+
+onMounted(() => {
+  document.title = props.title;
+  getdata();
+  nextTick(() => {
+    o = new IntersectionObserver(onscroll);
+    o.observe(bottom.value);
+  })
+});
+
+onUnmounted(() => {
+  o.disconnect();
+});
+
 </script>
 
 <style scoped>
