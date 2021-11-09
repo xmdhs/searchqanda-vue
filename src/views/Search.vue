@@ -8,7 +8,7 @@
     :css="false"
     @enter="enter"
   >
-    <div v-for="r in list" :key="r" class="result">
+    <div v-for="r in list" :key="r.Link" class="result">
       <search-result :keyword="r.Key" :href="r.Link" :title="r.Title" :txt="r.Txt" :txt1="r.Txt1"></search-result>
     </div>
   </transition-group>
@@ -30,7 +30,7 @@ import { ref, watch, toRefs, onMounted, nextTick, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 
-let list = ref([])
+let list = ref([] as SearchResultData[])
 let nextLink = ref("")
 let msg = ref("获取中")
 
@@ -44,10 +44,26 @@ let p = toRefs(props)
 
 let i = 0
 
-function enter(el: any, done: () => void) {
-  i = i + 80;
-  el.style["animation-delay"] = `${i}ms`;
-  done();
+function enter(el: Element, done: () => void) {
+  if (el instanceof HTMLElement) {
+    i = i + 80;
+    el.style["animation-delay"] = `${i}ms`;
+    done();
+  }
+}
+
+interface SearchResult {
+  code: number,
+  msg: string,
+  Data: SearchResultData[],
+}
+
+interface SearchResultData {
+  Key: string,
+  Link: string,
+  Title: string,
+  Txt: string,
+  Txt1: string,
 }
 
 async function getdata() {
@@ -56,7 +72,7 @@ async function getdata() {
   s.set("q", props.q);
   s.set("page", String(props.page));
   const response = await fetch("/search/api/s?" + s.toString());
-  const json = await response.json();
+  const json: SearchResult = await response.json();
   if (json.code != 0) {
     msg.value = json.msg;
     return;
