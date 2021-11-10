@@ -1,6 +1,6 @@
 <template>
     <div v-if="nextLink">
-        <router-link :to="nextLink">{{ page + " / " + allpage }}</router-link>
+        <router-link :to="nextLink">{{ page - 1 + " / " + allpage }}</router-link>
     </div>
     <div v-else>没有了</div>
 </template>

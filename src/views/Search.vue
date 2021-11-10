@@ -80,6 +80,7 @@ async function getdata() {
     msg.value = json.msg;
     return;
   }
+  count.value = json.data.count;
   list.value.push(...json.data.list);
   if (json.data.list.length >= 20 && json.data.count > props.page * 20) {
     let s = new URLSearchParams();
