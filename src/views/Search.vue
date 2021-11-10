@@ -8,8 +8,8 @@
     :css="false"
     @enter="enter"
   >
-    <div v-for="r in list" :key="r.Link" class="result">
-      <search-result :keyword="r.Key" :href="r.Link" :title="r.Title" :txt="r.Txt" :txt1="r.Txt1"></search-result>
+    <div v-for="r in list" :key="r.link" class="result">
+      <search-result :keyword="r.key" :href="r.link" :title="r.title" :txt="r.txt" :txt1="r.txt1"></search-result>
     </div>
   </transition-group>
   <div v-else>
@@ -17,10 +17,7 @@
   </div>
   <hr />
   <div ref="bottom">
-    <p v-if="nextLink">
-      <router-link :to="nextLink">more</router-link>
-    </p>
-    <p v-else>没有了</p>
+    <next-link :page="page" :count="count" :nextLink="link"></next-link>
   </div>
 </template>
 
@@ -28,10 +25,11 @@
 import searchResult from "../components/searchResult.vue";
 import { ref, watch, toRefs, onMounted, nextTick, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
+import nextLink from "../components/nextLink.vue"
 
-
-let list = ref([] as SearchResultData[])
-let nextLink = ref("")
+let count = ref(0)
+let link = ref("")
+let list = ref([] as SearchResultList[])
 let msg = ref("获取中")
 
 const props = defineProps({
@@ -55,15 +53,20 @@ function enter(el: Element, done: () => void) {
 interface SearchResult {
   code: number,
   msg: string,
-  Data: SearchResultData[],
+  data: SearchResultData,
 }
 
 interface SearchResultData {
-  Key: string,
-  Link: string,
-  Title: string,
-  Txt: string,
-  Txt1: string,
+  list: SearchResultList[],
+  count: number,
+}
+
+interface SearchResultList {
+  link: string,
+  title: string,
+  txt: string,
+  txt1: string,
+  key: string,
 }
 
 async function getdata() {
@@ -77,14 +80,14 @@ async function getdata() {
     msg.value = json.msg;
     return;
   }
-  list.value.push(...json.Data);
-  if (json.Data.length >= 20) {
+  list.value.push(...json.data.list);
+  if (json.data.list.length >= 20 && json.data.count > props.page * 20) {
     let s = new URLSearchParams();
     s.set("q", props.q);
     s.set("page", props.page ? String(Number(props.page + 1)) : "1");
-    nextLink.value = "/search/s?" + s.toString();
+    link.value = "/search/s?" + s.toString();
   } else {
-    nextLink.value = "";
+    link.value = "";
   }
   if (list.value.length >= 500) {
     list.value = list.value.slice(100, list.value.length);
@@ -99,8 +102,8 @@ let o: IntersectionObserver;
 const router = useRouter()
 
 function onscroll(e: IntersectionObserverEntry[]) {
-  if (e.length > 0 && e[0].intersectionRatio > 0 && nextLink.value != "") {
-    router.push(nextLink.value);
+  if (e.length > 0 && e[0].intersectionRatio > 0 && link.value != "") {
+    router.push(link.value);
   }
 }
 
