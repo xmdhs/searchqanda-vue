@@ -1,6 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@vitejs/plugin-legacy': ^1.6.2
   '@vitejs/plugin-vue': ^1.9.3
   vite: ^2.6.4
   vue: ^3.2.16
@@ -11,6 +12,7 @@ dependencies:
   vue-router: 4.0.12_vue@3.2.21
 
 devDependencies:
+  '@vitejs/plugin-legacy': 1.6.2_vite@2.6.13
   '@vitejs/plugin-vue': 1.9.4_vite@2.6.13
   vite: 2.6.13
 
@@ -21,6 +23,25 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
     dev: false
+
+  /@babel/standalone/7.16.3:
+    resolution: {integrity: sha512-hoStDfHl2+EYUv1LNHhZTysa+lMSwIEkkT4HnDNX+F0zqvPdoE2QLF7qtkd45cgCGOwQjrvwe2mOKcX3f6Wr8A==}
+    engines: {node: '>=6.9.0'}
+    dev: true
+
+  /@vitejs/plugin-legacy/1.6.2_vite@2.6.13:
+    resolution: {integrity: sha512-p5Bv/827WUpVN2m95ZYXzmjE3AblFE4CHasVoZ7dIwOPlyNcpg70SehEi5AWqyC0E7C1rHD8Nju9rWoV9uBLiw==}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      vite: ^2.0.0
+    dependencies:
+      '@babel/standalone': 7.16.3
+      core-js: 3.19.1
+      magic-string: 0.25.7
+      regenerator-runtime: 0.13.9
+      systemjs: 6.11.0
+      vite: 2.6.13
+    dev: true
 
   /@vitejs/plugin-vue/1.9.4_vite@2.6.13:
     resolution: {integrity: sha512-0CZqaCoChriPTTtGkERy1LGPcYjGFpi2uYRhBPIkqJqUGV5JnJFhQAgh6oH9j5XZHfrRaisX8W0xSpO4T7S78A==}
@@ -117,6 +138,11 @@ packages:
   /@vue/shared/3.2.21:
     resolution: {integrity: sha512-5EQmIPK6gw4UVYUbM959B0uPsJ58+xoMESCZs3N89XyvJ9e+fX4pqEPrOGV8OroIk3SbEvJcC+eYc8BH9JQrHA==}
     dev: false
+
+  /core-js/3.19.1:
+    resolution: {integrity: sha512-Tnc7E9iKd/b/ff7GFbhwPVzJzPztGrChB8X8GLqoYGdEOG8IpLnK1xPyo3ZoO3HsK6TodJS58VGPOxA+hLHQMg==}
+    requiresBuild: true
+    dev: true
 
   /csstype/2.6.18:
     resolution: {integrity: sha512-RSU6Hyeg14am3Ah4VZEmeX8H7kLwEEirXe6aU2IPfKNvhXwTflK5HQRDNI0ypQXoqmm+QPyG2IaPuQE5zMwSIQ==}
@@ -315,7 +341,6 @@ packages:
     resolution: {integrity: sha512-4CrMT5DOHTDk4HYDlzmwu4FVCcIYI8gauveasrdCu2IKIFOJ3f0v/8MDGJCDL9oD2ppz/Av1b0Nj345H9M+XIA==}
     dependencies:
       sourcemap-codec: 1.4.8
-    dev: false
 
   /nanoid/3.1.30:
     resolution: {integrity: sha512-zJpuPDwOv8D2zq2WRoMe1HsfZthVewpel9CAvTfc/2mBD1uUT/agc5f7GHGWXlYkFvi1mVxe4IjvP2HNrop7nQ==}
@@ -336,6 +361,10 @@ packages:
       nanoid: 3.1.30
       picocolors: 1.0.0
       source-map-js: 0.6.2
+
+  /regenerator-runtime/0.13.9:
+    resolution: {integrity: sha512-p3VT+cOEgxFsRRA9X4lkI1E+k2/CtnKtU4gcxyaCUreilL/vqI6CdZ3wxVUx3UOUg+gnUOQQcRI7BmSI656MYA==}
+    dev: true
 
   /resolve/1.20.0:
     resolution: {integrity: sha512-wENBPt4ySzg4ybFQW2TT1zMQucPK95HSh/nq2CFTZVOGut2+pQvSsgtda4d26YrYcr067wjbmzOG8byDPBX63A==}
@@ -363,7 +392,10 @@ packages:
 
   /sourcemap-codec/1.4.8:
     resolution: {integrity: sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==}
-    dev: false
+
+  /systemjs/6.11.0:
+    resolution: {integrity: sha512-7YPIY44j+BoY+E6cGBSw0oCU8SNTTIHKZgftcBdwWkDzs/M86Fdlr21FrzAyph7Zo8r3CFGscyFe4rrBtixrBg==}
+    dev: true
 
   /vite/2.6.13:
     resolution: {integrity: sha512-+tGZ1OxozRirTudl4M3N3UTNJOlxdVo/qBl2IlDEy/ZpTFcskp+k5ncNjayR3bRYTCbqSOFz2JWGN1UmuDMScA==}
