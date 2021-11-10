@@ -6,12 +6,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref,watchEffect } from 'vue'
 const props = defineProps({
     page: Number,
     count: Number,
     nextLink: String
 })
 let allpage = ref(0)
-allpage.value = Number((props.count / 20).toFixed(0))
+
+watchEffect(() => {
+    allpage.value = Number((props.count / 20).toFixed(0))
+})
 </script>
